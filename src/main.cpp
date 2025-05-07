@@ -108,8 +108,8 @@ public:
 int main()
 {
     // Create users
-    User admin("admin", "adminpass", true);
-    User user("user1", "userpass");
+    User admin("Fardin", "fardin123", true);
+    User user("user", "userpass");
 
     // Bank accounts
     vector<Account *> accounts;

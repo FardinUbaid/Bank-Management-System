@@ -310,7 +310,7 @@ void showInfo(int id, std::string name, double accBalance, std::string type, std
 // Create Account
 void CreateAccount(std::string name, double accBalance, std::string pass, std::string type, std::string usertype)
 {
-    std::ifstream file("Accounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
     std::string line;
     int maxId = 0;
 
@@ -332,7 +332,7 @@ void CreateAccount(std::string name, double accBalance, std::string pass, std::s
     int newId = maxId + 1;
 
     // Writing to file in append mode
-    std::ofstream outFile("Accounts.txt", std::ios::app);
+    std::ofstream outFile("../Data/Accounts.txt", std::ios::app);
     outFile << newId << "|" << name << "|" << accBalance << "|" << pass << "|" << type << "|" << usertype << "|Normal" << std::endl;
     outFile.close();
 
@@ -343,7 +343,7 @@ void CreateAccount(std::string name, double accBalance, std::string pass, std::s
 // Search Account
 void SearchAccount()
 {
-    std::ifstream file("Accounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
     std::string line;
 
     if (!file)
@@ -394,7 +394,7 @@ void SearchAccount()
 
 void SearchAccount(const std::string &storedName)
 {
-    std::ifstream file("Accounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
     std::string line;
 
     if (!file)
@@ -438,7 +438,7 @@ void SearchAccount(const std::string &storedName)
 }
 void SearchAccountAdmin(const std::string &storedName)
 {
-    std::ifstream file("Accounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
     std::string line;
 
     if (!file)
@@ -484,8 +484,8 @@ void SearchAccountAdmin(const std::string &storedName)
 // User Update Name or password
 void UpdateUserDetails(int id, const std::string &storedName)
 {
-    std::ifstream file("Accounts.txt");
-    std::ofstream tempFile("TempAccounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
+    std::ofstream tempFile("../Data/TempAccounts.txt");
     std::string line;
 
     if (!file)
@@ -550,13 +550,13 @@ void UpdateUserDetails(int id, const std::string &storedName)
 
     if (found)
     {
-        std::remove("Accounts.txt");
-        std::rename("TempAccounts.txt", "Accounts.txt");
+        std::remove("../Data/Accounts.txt");
+        std::rename("../Data/TempAccounts.txt", "../Data/Accounts.txt");
         std::cout << "Account details updated successfully.\n";
     }
     else
     {
-        std::remove("TempAccounts.txt");
+        std::remove("../Data/TempAccounts.txt");
         std::cout << "No such user found.\n";
     }
 }
@@ -565,8 +565,8 @@ void UpdateUserDetails(int id, const std::string &storedName)
 // Update Account Status
 void UpdateAccountStatus(const std::string &storedName)
 {
-    std::ifstream file("Accounts.txt");
-    std::ofstream tempFile("TempAccounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
+    std::ofstream tempFile("../Data/TempAccounts.txt");
     std::string line;
 
     if (!file)
@@ -637,21 +637,21 @@ void UpdateAccountStatus(const std::string &storedName)
 
     if (found)
     {
-        std::remove("Accounts.txt");
-        std::rename("TempAccounts.txt", "Accounts.txt");
+        std::remove("../Data/Accounts.txt");
+        std::rename("../Data/TempAccounts.txt", "../Data/Accounts.txt");
         std::cout << "Account status updated successfully.\n";
     }
     else
     {
-        std::remove("TempAccounts.txt");
+        std::remove("../Data/TempAccounts.txt");
         std::cout << "No such user found.\n";
     }
 }
 
 void DeleteAccount(const std::string &storedName)
 {
-    std::ifstream file("Accounts.txt");
-    std::ofstream tempFile("TempAccounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
+    std::ofstream tempFile("../Data/TempAccounts.txt");
     std::string line;
 
     if (!file)
@@ -689,20 +689,20 @@ void DeleteAccount(const std::string &storedName)
 
     if (found)
     {
-        std::remove("Accounts.txt");
-        std::rename("TempAccounts.txt", "Accounts.txt");
+        std::remove("../Data/Accounts.txt");
+        std::rename("../Data/TempAccounts.txt", "../Data/Accounts.txt");
         std::cout << "Account deleted successfully.\n";
     }
     else
     {
-        std::remove("TempAccounts.txt");
+        std::remove("../Data/TempAccounts.txt");
         std::cout << "No such user found.\n";
     }
 }
 // Login Feature
 bool SearchByNameAndPassword(const std::string &name, const std::string &password, int &id, std::string &storedName, double &balance, std::string &type, std::string &usertype, std::string &status)
 {
-    std::ifstream file("Accounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
     std::string line;
 
     if (!file)
@@ -742,7 +742,7 @@ bool SearchByNameAndPassword(const std::string &name, const std::string &passwor
 // Activity Logs
 void LogDeposit(int id, const std::string &name, double depositAmount, double newBalance)
 {
-    std::ofstream logFile("Deposits.txt", std::ios::app);
+    std::ofstream logFile("../Data/Deposits.txt", std::ios::app);
 
     if (!logFile)
     {
@@ -767,7 +767,7 @@ void LogDeposit(int id, const std::string &name, double depositAmount, double ne
 
 void LogWithdraw(int id, const std::string &name, double withdrawAmount, double newBalance)
 {
-    std::ofstream logFile("Withdrawals.txt", std::ios::app);
+    std::ofstream logFile("../Data/Withdrawals.txt", std::ios::app);
 
     if (!logFile)
     {
@@ -792,8 +792,8 @@ void LogWithdraw(int id, const std::string &name, double withdrawAmount, double 
 // Core Features
 void Deposit(const std::string &input)
 {
-    std::ifstream file("Accounts.txt");
-    std::ofstream tempFile("TempAccounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
+    std::ofstream tempFile("../Data/TempAccounts.txt");
     std::string line;
 
     if (!file)
@@ -867,20 +867,20 @@ void Deposit(const std::string &input)
 
     if (found)
     {
-        std::remove("Accounts.txt");
-        std::rename("TempAccounts.txt", "Accounts.txt");
+        std::remove("../Data/Accounts.txt");
+        std::rename("../Data/TempAccounts.txt", "../Data/Accounts.txt");
     }
     else
     {
-        std::remove("TempAccounts.txt");
+        std::remove("../Data/TempAccounts.txt");
         std::cout << "No such user found.\n";
     }
 }
 
 void Withdraw(const std::string &input)
 {
-    std::ifstream file("Accounts.txt");
-    std::ofstream tempFile("TempAccounts.txt");
+    std::ifstream file("../Data/Accounts.txt");
+    std::ofstream tempFile("../Data/TempAccounts.txt");
     std::string line;
 
     if (!file)
@@ -954,12 +954,12 @@ void Withdraw(const std::string &input)
 
     if (found)
     {
-        std::remove("Accounts.txt");
-        std::rename("TempAccounts.txt", "Accounts.txt");
+        std::remove("../Data/Accounts.txt");
+        std::rename("../Data/TempAccounts.txt", "../Data/Accounts.txt");
     }
     else
     {
-        std::remove("TempAccounts.txt");
+        std::remove("../Data/TempAccounts.txt");
         std::cout << "No such user found.\n";
     }
 }

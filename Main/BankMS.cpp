@@ -462,7 +462,7 @@ void SearchAccountAdmin(const std::string &storedName)
         std::getline(ss, usertype, '|');
         std::getline(ss, status, '|');
 
-        // Check if the current line matches the logged-in user's ID or name
+        // Check if the current line matches the logged-in user's name
         if (storedName == name)
         {
             int userId = std::stoi(idStr);

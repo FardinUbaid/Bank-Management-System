@@ -1,1 +1,2 @@
-1|John Doe|1000|ijogndoe
+1|Fardin Abu Ubaid|500|fardin123|Current|Admin|Normal
+2|fardin|510|f123|Savings|Regular|Normal

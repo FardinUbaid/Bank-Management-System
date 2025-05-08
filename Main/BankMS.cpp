@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <ctime> // Required for date and time
+#include <ctime>
 
 // Print Functions
 void showInfo(int id, std::string name, double accBalance, std::string type, std::string usertype, std::string status);
@@ -11,12 +11,14 @@ void showInfo(int id, std::string name, double accBalance, std::string type, std
 // CRUD Operations
 void CreateAccount(std::string name, double accBalance, std::string pass, std::string type, std::string usertype);
 void SearchAccount();
-void UpdateUserDetails();
+void SearchAccount(int id, const std::string &storedName);
+void UpdateUserDetails(int id, const std::string &storedName);
 // Admin Features
 void UpdateAccountStatus();
+void UpdateAccountStatus(int id, const std::string &storedName);
 void DeleteAccount();
 // Login Feature
-bool SearchByNameAndPassword(const std::string &name, const std::string &password);
+bool SearchByNameAndPassword(const std::string &name, const std::string &password, int &id, std::string &storedName, double &balance, std::string &type, std::string &usertype, std::string &status);
 // Core Features
 void Deposit(const std::string &input);
 void Withdraw(const std::string &input);
@@ -24,11 +26,229 @@ void Withdraw(const std::string &input);
 void LogDeposit(int id, const std::string &name, double depositAmount, double newBalance);
 void LogWithdraw(int id, const std::string &name, double withdrawAmount, double newBalance);
 
+// Class for creating accounts
+class Account
+{
+private:
+    std::string name;
+    std::string password;
+    std::string type;
+    std::string usertype;
+    double balance;
+
+public:
+    Account() : balance(500.00) {}
+    void Usertype()
+    {
+        std::cout << "______________________[User Type]____________________\n";
+        std::cout << "Select User Type:\n";
+        std::cout << "      1. Admin\n";
+        std::cout << "      2. Regular\n\n";
+        std::cout << "_____________________________________________________\n";
+        std::cout << "Enter your choice: ";
+    }
+    void AccountType()
+    {
+        std::cout << "____________________[Account Type]___________________\n";
+        std::cout << "Select Account Type:\n";
+        std::cout << "      1. Savings\n";
+        std::cout << "      2. Current\n\n";
+        std::cout << "_____________________________________________________\n";
+        std::cout << "Enter your choice: ";
+    }
+    void createAccount()
+    {
+        Usertype();
+        int userTypeChoice;
+        std::cin >> userTypeChoice;
+        std::cin.ignore();
+
+        if (userTypeChoice == 1)
+        {
+            usertype = "Admin";
+        }
+        else if (userTypeChoice == 2)
+        {
+            usertype = "Regular";
+        }
+        else
+        {
+            std::cout << "Invalid choice. Defaulting to Regular user.\n";
+            usertype = "Regular";
+            std::cout << "__________________________________________________________\n";
+        }
+
+        AccountType();
+        int accountTypeChoice;
+        std::cin >> accountTypeChoice;
+        std::cin.ignore();
+
+        if (accountTypeChoice == 1)
+        {
+            type = "Savings";
+        }
+        else if (accountTypeChoice == 2)
+        {
+            type = "Current";
+        }
+        else
+        {
+            std::cout << "Invalid choice. Defaulting to Savings account.\n";
+            type = "Savings";
+            std::cout << "__________________________________________________________\n";
+        }
+
+        std::cout << "Enter your name: ";
+        std::getline(std::cin, name);
+
+        std::cout << "Enter your password: ";
+        std::getline(std::cin, password);
+
+        CreateAccount(name, balance, password, type, usertype);
+    }
+};
+
+void showAdminMenu()
+{
+    std::cout << "_____________________[Admin Menu]_____________________\n\n";
+    std::cout << "      1. Update Account Status\n";
+    std::cout << "      2. Delete Account\n";
+    std::cout << "      3. Search Account\n";
+    std::cout << "      4. Logout\n";
+    std::cout << "_____________________________________________________\n";
+}
+
+void showUserMenu()
+{
+    std::cout << "_____________________[User Menu]_____________________\n\n";
+    std::cout << "      1. Deposit\n";
+    std::cout << "      2. Withdraw\n";
+    std::cout << "      3. Update User Details\n";
+    std::cout << "      4. Logout\n";
+    std::cout << "_____________________________________________________\n";
+}
+
 int main()
 {
-    // Example usage
-    // CreateAccount("John Doe", 1000.0, "password123", "Savings", "Regular");
-    // UpdateAccountStatus();
+    while (true)
+    {
+        std::cout << "______________________[Bank Management System]_______________________";
+        std::cout << "\n           Welcome to the Bank Management System\n\n";
+        std::cout << "      1. Login\n";
+        std::cout << "      2. Create New Account\n";
+        std::cout << "      3. Exit\n";
+        std::cout << "_______________________________________________________________________\n";
+        std::cout << "Enter your choice: ";
+
+        int choice;
+        std::cin >> choice;
+        std::cin.ignore();
+
+        if (choice == 1)
+        {
+            std::string name, password;
+            std::cout << "Enter your name: ";
+            std::getline(std::cin, name);
+            std::cout << "Enter your password: ";
+            std::getline(std::cin, password);
+
+            int id;
+            std::string storedName, type, usertype, status;
+            double balance;
+
+            if (SearchByNameAndPassword(name, password, id, storedName, balance, type, usertype, status))
+            {
+                std::cout << "_______________________________________________________________________\n";
+                std::cout << "Login successful!\nWelcome, [" << storedName << "]\n\n";
+
+                if (usertype == "Admin")
+                {
+                    while (true)
+                    {
+                        showAdminMenu();
+                        std::cout << "Enter your choice: ";
+                        int adminChoice;
+                        std::cin >> adminChoice;
+                        std::cin.ignore();
+
+                        switch (adminChoice)
+                        {
+                        case 1:
+                            UpdateAccountStatus();
+                            break;
+                        case 2:
+                            DeleteAccount();
+                            break;
+                        case 3:
+                            SearchAccount();
+                            break;
+                        case 4:
+                            std::cout << "Logging out...\n";
+                            std::cout << "_______________________________________________________________________\n";
+                            goto mainMenu;
+                        default:
+                            std::cout << "Invalid choice. Try again.\n";
+                        }
+                    }
+                }
+                else if (usertype == "Regular")
+                {
+                    while (true)
+                    {
+                        showUserMenu();
+                        std::cout << "Enter your choice: ";
+                        int userChoice;
+                        std::cin >> userChoice;
+                        std::cin.ignore();
+
+                        switch (userChoice)
+                        {
+                        case 1:
+                            std::cout << "Enter your Name to deposit: ";
+                            std::getline(std::cin, name);
+                            Deposit(name);
+                            break;
+                        case 2:
+                            std::cout << "Enter your Name to withdraw: ";
+                            std::getline(std::cin, name);
+                            Withdraw(name);
+                            break;
+                        case 3:
+                            UpdateUserDetails(id, storedName);
+                            break;
+                        case 4:
+                            std::cout << "Logging out...\n";
+                            std::cout << "_______________________________________________________________________\n";
+                            goto mainMenu;
+                        default:
+                            std::cout << "Invalid choice. Try again.\n";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                std::cout << "Invalid name or password. Try again.\n";
+            }
+        }
+        else if (choice == 2)
+        {
+            Account newAccount;
+            newAccount.createAccount();
+        }
+        else if (choice == 3)
+        {
+            std::cout << "Exiting the system. Goodbye!\n";
+            break;
+        }
+        else
+        {
+            std::cout << "Invalid choice. Try again.\n";
+        }
+
+    mainMenu:
+        continue;
+    }
 
     return 0;
 }
@@ -109,7 +329,7 @@ void SearchAccount()
 
     std::string input;
     std::cout << "Enter ID or Name to search: ";
-    std::cin.ignore(); // To flush newline from previous input
+    std::cin.ignore();
     std::getline(std::cin, input);
 
     bool found = false;
@@ -146,11 +366,10 @@ void SearchAccount()
 
     file.close();
 }
-// User Update Name or password
-void UpdateUserDetails()
+
+void SearchAccount(int id, const std::string &storedName)
 {
     std::ifstream file("Accounts.txt");
-    std::ofstream tempFile("TempAccounts.txt");
     std::string line;
 
     if (!file)
@@ -158,11 +377,6 @@ void UpdateUserDetails()
         std::cout << "Accounts.txt not found.\n";
         return;
     }
-
-    std::string input;
-    std::cout << "Enter your ID or Name to update details: ";
-    std::cin.ignore(); // To flush newline from previous input
-    std::getline(std::cin, input);
 
     bool found = false;
 
@@ -179,13 +393,61 @@ void UpdateUserDetails()
         std::getline(ss, usertype, '|');
         std::getline(ss, status, '|');
 
-        if (input == idStr || input == name)
+        // Check if the current line matches the logged-in user's ID or name
+        if (std::to_string(id) == idStr && storedName == name)
+        {
+            int userId = std::stoi(idStr);
+            double accBalance = std::stod(balanceStr);
+            showInfo(userId, name, accBalance, type, pass, usertype, status);
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        std::cout << "No such user found.\n";
+    }
+
+    file.close();
+}
+
+// User Update Name or password
+void UpdateUserDetails(int id, const std::string &storedName)
+{
+    std::ifstream file("Accounts.txt");
+    std::ofstream tempFile("TempAccounts.txt");
+    std::string line;
+
+    if (!file)
+    {
+        std::cout << "Accounts.txt not found.\n";
+        return;
+    }
+
+    bool found = false;
+
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+        std::string idStr, name, balanceStr, pass, type, usertype, status;
+
+        std::getline(ss, idStr, '|');
+        std::getline(ss, name, '|');
+        std::getline(ss, balanceStr, '|');
+        std::getline(ss, pass, '|');
+        std::getline(ss, type, '|');
+        std::getline(ss, usertype, '|');
+        std::getline(ss, status, '|');
+
+        // Check if the current line matches the logged-in user's ID or name
+        if (std::to_string(id) == idStr && storedName == name)
         {
             std::cout << "Account found. What would you like to update?\n";
             std::cout << "1. Name\n2. Password\nEnter your choice: ";
             int choice;
             std::cin >> choice;
-            std::cin.ignore(); // To flush newline from input buffer
+            std::cin.ignore();
 
             switch (choice)
             {
@@ -202,12 +464,14 @@ void UpdateUserDetails()
                 break;
             }
 
+            // Write updated user information to the temp file
             tempFile << idStr << "|" << name << "|" << balanceStr << "|" << pass << "|"
                      << type << "|" << usertype << "|" << status << std::endl;
             found = true;
         }
         else
         {
+            // Write the original line back for accounts that don't match
             tempFile << line << std::endl;
         }
     }
@@ -244,7 +508,7 @@ void UpdateAccountStatus()
 
     std::string input;
     std::cout << "Enter ID or Name to update status: ";
-    std::cin.ignore(); // To flush newline from previous input
+    std::cin.ignore();
     std::getline(std::cin, input);
 
     bool found = false;
@@ -319,6 +583,91 @@ void UpdateAccountStatus()
     }
 }
 
+void UpdateAccountStatus(int id, const std::string &storedName)
+{
+    std::ifstream file("Accounts.txt");
+    std::ofstream tempFile("TempAccounts.txt");
+    std::string line;
+
+    if (!file)
+    {
+        std::cout << "Accounts.txt not found.\n";
+        return;
+    }
+
+    bool found = false;
+
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+        std::string idStr, name, balanceStr, pass, type, usertype, status;
+
+        std::getline(ss, idStr, '|');
+        std::getline(ss, name, '|');
+        std::getline(ss, balanceStr, '|');
+        std::getline(ss, pass, '|');
+        std::getline(ss, type, '|');
+        std::getline(ss, usertype, '|');
+        std::getline(ss, status, '|');
+
+        // Check if the current line matches the logged-in user's ID or name
+        if (std::to_string(id) == idStr && storedName == name)
+        {
+            std::cout << "Current Status: " << status << "\n";
+            std::cout << "Choose new status:\n";
+            std::cout << "1. Normal\n2. Blocked\n3. Suspended\n4. Closed\nEnter: ";
+
+            int choice;
+            std::cin >> choice;
+
+            std::string newStatus;
+            switch (choice)
+            {
+            case 1:
+                newStatus = "Normal";
+                break;
+            case 2:
+                newStatus = "Blocked";
+                break;
+            case 3:
+                newStatus = "Suspended";
+                break;
+            case 4:
+                newStatus = "Closed";
+                break;
+            default:
+                std::cout << "Invalid input. Status unchanged.\n";
+                newStatus = status;
+                break;
+            }
+
+            tempFile << idStr << "|" << name << "|" << balanceStr << "|" << pass << "|"
+                     << type << "|" << usertype << "|" << newStatus << std::endl;
+
+            found = true;
+        }
+        else
+        {
+            tempFile << line << std::endl;
+        }
+    }
+
+    file.close();
+    tempFile.close();
+
+    if (found)
+    {
+        std::remove("Accounts.txt");
+        std::rename("TempAccounts.txt", "Accounts.txt");
+        std::cout << "Account status updated successfully.\n";
+    }
+    else
+    {
+        std::remove("TempAccounts.txt");
+        std::cout << "No such user found.\n";
+    }
+}
+
 void DeleteAccount()
 {
     std::ifstream file("Accounts.txt");
@@ -333,7 +682,7 @@ void DeleteAccount()
 
     std::string input;
     std::cout << "Enter ID or Name to delete account: ";
-    std::cin.ignore(); // To flush newline from previous input
+    std::cin.ignore();
     std::getline(std::cin, input);
 
     bool found = false;
@@ -355,7 +704,7 @@ void DeleteAccount()
         {
             std::cout << "Account with ID: " << idStr << " and Name: " << name << " will be deleted.\n";
             found = true;
-            continue; // Skip writing this line to the temp file
+            continue;
         }
 
         tempFile << line << std::endl;
@@ -377,7 +726,7 @@ void DeleteAccount()
     }
 }
 // Login Feature
-bool SearchByNameAndPassword(const std::string &name, const std::string &password)
+bool SearchByNameAndPassword(const std::string &name, const std::string &password, int &id, std::string &storedName, double &balance, std::string &type, std::string &usertype, std::string &status)
 {
     std::ifstream file("Accounts.txt");
     std::string line;
@@ -391,15 +740,19 @@ bool SearchByNameAndPassword(const std::string &name, const std::string &passwor
     while (std::getline(file, line))
     {
         std::stringstream ss(line);
-        std::string idStr, storedName, balanceStr, storedPass, type, usertype, status;
+        std::string idStr, storedPass;
 
         std::getline(ss, idStr, '|');
         std::getline(ss, storedName, '|');
+        std::string balanceStr;
         std::getline(ss, balanceStr, '|');
+        balance = std::stod(balanceStr);
         std::getline(ss, storedPass, '|');
         std::getline(ss, type, '|');
         std::getline(ss, usertype, '|');
         std::getline(ss, status, '|');
+
+        id = std::stoi(idStr);
 
         // Checking if both name and password match
         if (storedName == name && storedPass == password)
@@ -412,10 +765,10 @@ bool SearchByNameAndPassword(const std::string &name, const std::string &passwor
     file.close();
     return false;
 }
-
+// Activity Logs
 void LogDeposit(int id, const std::string &name, double depositAmount, double newBalance)
 {
-    std::ofstream logFile("Deposits.txt", std::ios::app); // Open in append mode
+    std::ofstream logFile("Deposits.txt", std::ios::app);
 
     if (!logFile)
     {
@@ -440,7 +793,7 @@ void LogDeposit(int id, const std::string &name, double depositAmount, double ne
 
 void LogWithdraw(int id, const std::string &name, double withdrawAmount, double newBalance)
 {
-    std::ofstream logFile("Withdrawals.txt", std::ios::app); // Open in append mode
+    std::ofstream logFile("Withdrawals.txt", std::ios::app);
 
     if (!logFile)
     {
@@ -448,7 +801,7 @@ void LogWithdraw(int id, const std::string &name, double withdrawAmount, double 
         return;
     }
 
-    // Get current date and time
+    // Getting current date and time
     std::time_t now = std::time(nullptr);
     std::tm *localTime = std::localtime(&now);
 
@@ -462,7 +815,7 @@ void LogWithdraw(int id, const std::string &name, double withdrawAmount, double 
 
     logFile.close();
 }
-
+// Core Features
 void Deposit(const std::string &input)
 {
     std::ifstream file("Accounts.txt");
@@ -498,31 +851,30 @@ void Deposit(const std::string &input)
         {
             found = true;
 
-            // Check if the account status is "Normal"
+            // Checking if the account status is "Normal"
             if (status != "Normal")
             {
                 std::cout << "Deposit not allowed. Account status is: " << status << "\n";
-                tempFile << line << std::endl; // Write the original line back
+                tempFile << line << std::endl;
                 continue;
             }
 
-            // Prompt for deposit amount
             double depositAmount;
             std::cout << "Enter deposit amount (max 500,000.00): ";
             std::cin >> depositAmount;
 
-            if (depositAmount <= 0 || depositAmount > 500000.00)
+            if (depositAmount <= 50 || depositAmount > 500000.00)
             {
-                std::cout << "Invalid deposit amount. Deposit must be between 0.01 and 500,000.00.\n";
-                tempFile << line << std::endl; // Write the original line back
+                std::cout << "Invalid deposit amount. Deposit must be between 50 and 500,000.00.\n";
+                tempFile << line << std::endl;
                 continue;
             }
 
-            // Update balance
+            // Updating balance
             balance += depositAmount;
             std::cout << "Deposit successful! New balance: " << balance << "\n";
 
-            // Write updated account information to the temp file
+            // updated account information to the temp file
             tempFile << idStr << "|" << name << "|" << balance << "|" << pass << "|"
                      << type << "|" << usertype << "|" << status << std::endl;
 
@@ -531,7 +883,7 @@ void Deposit(const std::string &input)
         }
         else
         {
-            // Write the original line back for accounts that don't match
+
             tempFile << line << std::endl;
         }
     }
@@ -581,7 +933,7 @@ void Withdraw(const std::string &input)
         int id = std::stoi(idStr);
         double balance = std::stod(balanceStr);
 
-        // Check if the input matches the ID or name
+        // Checking if the input matches the ID or name
         if (input == idStr || input == name)
         {
             found = true;
@@ -590,19 +942,18 @@ void Withdraw(const std::string &input)
             if (status != "Normal")
             {
                 std::cout << "Withdrawal not allowed. Account status is: " << status << "\n";
-                tempFile << line << std::endl; // Write the original line back
+                tempFile << line << std::endl;
                 continue;
             }
 
-            // Prompt for withdrawal amount
             double withdrawAmount;
             std::cout << "Enter withdrawal amount: ";
             std::cin >> withdrawAmount;
 
-            if (withdrawAmount <= 500 || withdrawAmount > balance)
+            if (withdrawAmount <= 10 || withdrawAmount > balance)
             {
-                std::cout << "Invalid withdrawal amount. It must be greater than 500 and less than or equal to your current balance.\n";
-                tempFile << line << std::endl; // Write the original line back
+                std::cout << "Invalid withdrawal amount. It must be greater than 10 and less than or equal to your current balance.\n";
+                tempFile << line << std::endl;
                 continue;
             }
 
@@ -610,7 +961,7 @@ void Withdraw(const std::string &input)
             balance -= withdrawAmount;
             std::cout << "Withdrawal successful! New balance: " << balance << "\n";
 
-            // Write updated account information to the temp file
+            // updated account information to the temp file
             tempFile << idStr << "|" << name << "|" << balance << "|" << pass << "|"
                      << type << "|" << usertype << "|" << status << std::endl;
 
@@ -619,7 +970,7 @@ void Withdraw(const std::string &input)
         }
         else
         {
-            // Write the original line back for accounts that don't match
+
             tempFile << line << std::endl;
         }
     }

@@ -1,0 +1,1 @@
+ID: 2, Name: Fardin, Withdrawal Amount: 30, New Balance: 510, Date: 2025-5-8, Time: 19:46

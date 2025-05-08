@@ -1,2 +1,30 @@
-1|Fardin Abu Ubaid|500|fardin123|Current|Admin|Normal
+1|Fardin Abu Ubaid|40500|fardin123|Current|Admin|Normal
 2|fardin|510|f123|Savings|Regular|Normal
+3|Alice Smith|1200|alice2023|Savings|Regular|Normal
+4|Bob Jones|2450.50|bobpass|Current|Regular|Normal
+5|Charlie Ray|30000|charlie88|Savings|Regular|Blocked
+6|Dana Kim|54000|danaK2024|Current|Admin|Normal
+7|Ethan Lee|17500|ethanpass|Savings|Regular|Suspended
+8|Fatima Noor|8900|fatima@321|Current|Regular|Normal
+9|George Zhao|990|gzhao|Savings|Regular|Normal
+10|Hannah Lee|13400|hlee19|Savings|Regular|Closed
+11|Ivan Petrov|20000|ivan20|Current|Admin|Normal
+12|Julia Wong|7600|jwongpass|Savings|Regular|Normal
+13|Kevin Tran|5000|kevin123|Savings|Regular|Normal
+14|Linda Brown|4200|linda321|Current|Regular|Normal
+15|Mohammed Khan|15900|mkhan007|Savings|Admin|Blocked
+16|Nina Patel|8700|nina_pw|Current|Regular|Normal
+17|Oscar Wilde|9200|oscar98|Savings|Regular|Suspended
+18|Priya Das|14950|priya_pw|Savings|Regular|Normal
+19|Quinn Taylor|11200|qtaylor|Current|Regular|Normal
+20|Rahim Uddin|8300|rahim01|Savings|Regular|Normal
+21|Sara Ahmed|6500|sara@pass|Current|Regular|Normal
+22|Tom Hardy|18800|tompass1|Savings|Regular|Blocked
+23|Uma Devi|9700|uma321|Current|Regular|Normal
+24|Victor Hugo|4300|victor_h|Savings|Regular|Normal
+25|Wafa Siddiqi|15600|wafa789|Current|Admin|Normal
+26|Xiang Liu|14400|xliu_2025|Savings|Regular|Closed
+27|Yara Bello|2200|yara_pw|Current|Regular|Normal
+28|Zain Malik|5100|zmalik88|Savings|Regular|Normal
+29|Ahsan Rizvi|7800|ahsanpass|Current|Regular|Suspended
+30|Bilal Miah|6650|bilal2024|Savings|Regular|Normal
